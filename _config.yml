@@ -24,7 +24,6 @@ github_username:  ozanerdem
 
 # Build settings
 markdown: kramdown
-theme: jekyll-theme-tactile
 plugins:
   - jekyll-feed
 
