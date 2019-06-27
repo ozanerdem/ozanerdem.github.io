@@ -289,6 +289,8 @@ In the following few post, I will dive deeper into practicalities of Cbc, such
 as the C++ API, and customizing the behaviour of the solver. Hope you enjoyed
 this post, and looking forward to hear any comments!
 
+### Notes
+
 [^candycrushref]: [Candy Crush is NP-hard](https://arxiv.org/abs/1403.1911)
 [^inequality]: The definition can be extended to include equalities as well, as an equality can be written as two inequalities.
 [^cook]: [Cook's Theorem](https://en.wikipedia.org/wiki/Cook%E2%80%93Levin_theorem)
