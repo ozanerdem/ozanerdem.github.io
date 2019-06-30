@@ -10,7 +10,7 @@ mathjax: true
 
 
 This series of posts will cover a brief introduction to
-integer programming using the Cbc solver[^cbc]. Even though I have extensive experience in solvers for various computational problems, I have only recently started using Cbc, and I am far from being an expert on it. The following few posts will both be an introduction to integer programming for other people, and will also document my experience with Cbc.
+integer programming using the Cbc solver[^cbc]. Even though I have quite some experience in solvers for various computational problems, I have only recently started using Cbc, and I am far from being an expert on it. The following few posts will both be an introduction to integer programming for other people, and will also document my experience with Cbc.
 
 These posts will refer to "integer programming", however most of the content would still
 be applicable to "integer linear programming (ILP)", also known as "mixed
@@ -78,7 +78,7 @@ optimization version, you can also decide all the $$k$$ values the decision
 version can satisfy.
 
 To show the usefulness of integer programming, we will leverage a significant
-result of Stephen Cook, known as Cook's theorem[^cook], which states that the Boolean
+result of Stephen Cook, known as Cook's Theorem[^cook], which states that the Boolean
 satisfiability problem is NP-complete. In other terms, given any problem in the
 NP complexity class we can express it as an instance of the Boolean satisfiability
 problem, and solve it with a satisfiability solver.
@@ -109,7 +109,7 @@ $$term(l)$$. With all this machinery, we now can boil down each clause $$(l_1 \v
 This concludes the our somewhat-informal proof that we can use an integer
 programming solver to solve "any" problem in NP.
 
-So far so good! The only missing piece of the puzzle is what the NP complexity
+So far so good! The only missing piece of the puzzle is knowing what the NP complexity
 class stands for. NP stands for "nondeterministic polynomial time", which is the set of decision problems that we can verify the
 solutions in polynomial time[^npclass], and it covers all the polynomial problems, as well
 as all the interesting NP-complete problems.
@@ -144,7 +144,7 @@ researchers working to improve solvers for these problems for decades, I would
 consider giving these solvers a try.
 
 Of course, this line of reasoning can break if we consider the following:
-* When we are converting problems to each other, we can introduce
+* When we convert problems to each other, we can introduce
   "inefficiencies". For instance, as we saw above, there is a very direct
   mapping from the Boolean satisfiability problem instances to integer
   programming instances. However, even though the converse is possible, it is
