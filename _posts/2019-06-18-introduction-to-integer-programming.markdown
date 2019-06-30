@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Introduction to Integer Programming"
+title:  "Introduction to Integer Programming with Cbc"
 date:   2019-06-18 22:03:20 -0400
 categories: jekyll update
 mathjax: true
@@ -10,13 +10,13 @@ mathjax: true
 
 
 This series of posts will cover a brief introduction to
-integer programming using Cbc. Even though I have extensive experience in solvers for various combinatorial problems, I have only recently started using Cbc, and I am far from being an expert on it. The following few posts will both be an introduction to the topic for other people, and will also document my experience with Cbc.
+integer programming using the Cbc solver[^cbc]. Even though I have extensive experience in solvers for various computational problems, I have only recently started using Cbc, and I am far from being an expert on it. The following few posts will both be an introduction to integer programming for other people, and will also document my experience with Cbc.
 
-These posts will refer to "integer programming", however most of them would be
-still applicable to "integer linear programming (ILP)", also known as "mixed
+These posts will refer to "integer programming", however most of the content would still
+be applicable to "integer linear programming (ILP)", also known as "mixed
 integer linear programming (MILP). The difference between the former and the
 latter two is that integer programming admits only integer variables. This distinction does not change the
-complexity of the problem, and the decision version of both are NP-complete.
+complexity of the problem, and the decision version of all are NP-complete.
 
 ## Basic definition
 
@@ -35,16 +35,18 @@ f_2(x) \\
 f_n(x) \\
 $$
 
-where $$G(x)$$ is a linear function, and $$f_i(x)$$ are all linear
-inequalities[^inequality].
+where each $x$ is an integer, $$G(x)$$ is a linear function, and $$f_i(x)$$ are all linear
+inequalities[^inequality]. In other terms, we want to optimize $$G(x)$$ while
+satisfying all the constraints $$f_1(x), f_2(x), \ldots, f_n(x)$$ at the same
+time. 
 
 ## Why do we care about integer programming?
 
 In computer science, algorithms, methods, and paradigms have a
 degree of usefulness in two dimensions:
 
-* What can we solve with this tool? What are some problems that we can express
-  in the language (or input) this tool?
+* What can we solve with this tool? What are the problems that we can express
+  in the language (or input) this tool, and what are the ones that we cannot?
 * How efficient is this tool?
 
 The questions regarding the first question can be answered by noting that integer programming is very useful for solving combinatorial optimization problems. Some examples are popular puzzles (like generalized versions of Sudoku, FreeCell, and even Candy Crush[^candycrushref]), various scheduling problems (job-shop scheduling, flow shop scheduling, multiprocessor scheduling), and interesting computer science problems with many practical applications (traveling salesperson problem, graph coloring, graph partitioning).
@@ -52,9 +54,10 @@ The questions regarding the first question can be answered by noting that intege
 However, these examples by themselves do not give us the precise set of
 problems we can express with integer programming. Luckily, complexity theory gives us some insight on the usefulness of this
 paradigm (and similar NP-complete paradigms). If you are not interested in the
-theory of integer programming, you can skip to the next subsection to see how
+theory of integer programming, you can skip to the [next section](#an-example-problem) to see how
 we can solve integer programming problems in practice.
 
+### What can we solve with integer programming?
 To discuss the set of problems we can solve with integer programming, let us first
 consider the "decision version" of the integer programming problem:
 
@@ -69,50 +72,104 @@ f_n(x) \\
 $$
 
 Note that, in some sense, this is equivalent to the optimization version: If you
-can efficiently solve the decision version for some $$k$$, you can increase $$k$$
-one-by-one to find the maximum value. Conversely, if you can solve the
-optimization version efficiently, you can also efficiently decide all the $$k$$ values the decision
+are able to  solve the decision version for some $$k$$, you can increase $$k$$
+one by one to find the maximum value. Conversely, if you are able to solve the
+optimization version, you can also decide all the $$k$$ values the decision
 version can satisfy.
 
 To show the usefulness of integer programming, we will leverage a significant
 result of Stephen Cook, known as Cook's theorem[^cook], which states that the Boolean
-Satisfiability Problem is NP-complete. In other terms, given any problem in the
-NP complexity class, we can express it as an instance of the Boolean Satisfiability
-Problem, and solve it with a satisfiability solver.
+satisfiability problem is NP-complete. In other terms, given any problem in the
+NP complexity class we can express it as an instance of the Boolean satisfiability
+problem, and solve it with a satisfiability solver.
 
 In a similar fashion, we can show that given an integer programming solver, we
-can use it to solve "any" instance of the Boolean Satisfiability Problem. If we
+can use it to solve "any" instance of the Boolean satisfiability sroblem. If we
 can show this, due to transitivity, it would mean that we can use an integer programming solver to
 solve any problem in NP.
 
-To show this, let us examine what the Boolean Satisfiability Problem is. It
+To show this, let us examine what the Boolean satisfiability problem is. It
 asks for an assignment to Boolean variables that satisfy clauses $$ C_1,
-C_2, \ldots, C_n$$, where each clause is the "or" of variables $x$ or negations
+C_2, \ldots, C_n$$ at the same time, where each clause is the "or" of variables $x$ or negations
 of variables $$\neg x$$. We also denote a possibly negated variable a
 "literal". Hence, a clause can be written as $$(l_1 \vee l_2 \vee \ldots \vee l_n)$$,
-where $$ \vee $$ is the symbol for "or".
+where $$ \vee $$ is the symbol for "or", and each $$l_i$$ is a literal.
 
 To show that we can solve the satisfiability problem with an integer
 programming solver, all we need to do is to show how we can model each clause
 as a linear constraint over integers.
 
-It turns out that this is pretty straightforward: Each variable $$x$$ in the
-satisfiability problem is a variable $$0 \leq x' \leq 1$$, each positive
+It turns out that this is pretty straightforward: Each Boolean variable $$x$$ in the
+satisfiability problem will corresponding to an integer programming variable $$0 \leq x' \leq 1$$, each positive
 literal $$x$$ corresponds to the variable $$ x' $$, and each negative literal
 $$\neg x$$ corresponds to an expression $$ 1-x' $$. Let us denote this
-linear term corresponding to literal $$l$$ as
-$$term(l)$$. With all this machinery, we now can boil down each clause $$(l_1 \vee l_2 \vee \ldots \vee l_n)$$ as $$term(l_1) + term(l_2) + \ldots + term(l_n) \geq 1$$. It is easy to see that whenever the clause is satisfied, the linear inequality is satisfied, and vice versa.
+linear term corresponding to literal $$l$$ to
+$$term(l)$$. With all this machinery, we now can boil down each clause $$(l_1 \vee l_2 \vee \ldots \vee l_n)$$ as $$term(l_1) + term(l_2) + \ldots + term(l_n) \geq 1$$. It is easy to see that whenever the clause is satisfied the linear inequality is satisfied, and vice versa.
 
 This concludes the our somewhat-informal proof that we can use an integer
 programming solver to solve "any" problem in NP.
 
 So far so good! The only missing piece of the puzzle is what the NP complexity
-class stands for. NP is the set of decision problems that we can verify the
-solutions in polynomial time, which covers all the polynomial problems, as well
-as all the interesting NP-complete problems, which are quite a lot of
-interesting problems. Of course, if you know a polynomial problem, you would
+class stands for. NP stands for "nondeterministic polynomial time", which is the set of decision problems that we can verify the
+solutions in polynomial time[^npclass], and it covers all the polynomial problems, as well
+as all the interesting NP-complete problems.
+Of course, if you know a polynomial problem, you would
 not use integer programming to solve it as it is too much big of a hammer,
 however it is nice to know that it is possible to do so.
+
+### How efficient is integer programming?
+
+The short answer is: We do not know! To this date, we do not know of any
+algorithms to solve integer programming problem in polynomial time, and this is
+actually known as the "P versus NP problem" in computer science[^pvsnp]. If we follow the
+reasoning in the previous subsection, we can make the following remarks:
+
+* If there was an algorithm to solve the integer programming problem in
+  polynomial time, we could solve all the instances of the Boolean
+  satisfiability problem in polynomial time (with the conversion we did in the
+  previous section).
+* If we can solve the Boolean satisfiability problem in polynomial time, then
+  we can solve all the problems in NP in polynomial time (according to Cook's
+  Theorem).
+* If we can solve all the problems in NP in polynomial time, that would be a
+  proof of $$P=NP$$.
+
+Even though we do not know whether we can solve the integer programming problem
+in polynomial time, we know this: If you have a NP-complete problem at hand,
+and if you think you can solve it very efficiently, then you should think twice: If
+your method is fast indeed, you can solve any integer programming instance (or
+Boolean satisfiability instance, or anything in NP) with that method, by
+boiling down your problem to any of these. Given that there are hoards of
+researchers working to improve solvers for these problems for decades, I would
+consider giving these solvers a try.
+
+Of course, this line of reasoning can break if we consider the following:
+* When we are converting problems to each other, we can introduce
+  "inefficiencies". For instance, as we saw above, there is a very direct
+  mapping from the Boolean satisfiability problem instances to integer
+  programming instances. However, even though the converse is possible, it is
+  not that straightforward and it will increase the number of variables and constraints in
+  the problem.
+* If you are a domain expert in your own problem, then you might very easily
+  come up with useful heuristics that a generic integer programming solver might not
+  come up with. Moreover, there is a good chance that your constraints have
+  patterns, and you can come up with specialized data structures to hold them (rather than
+  for instance, generic sparse matrices an integer programming solver would use).
+  However, you should also consider the fact that your own domain expertise can
+  be embedded in an integer programming solvers, which are very customizable in
+  general.
+
+Additionally, you also would not want to use an integer programming solver to
+solve any problem that can be already solved with a polynomial algorithm. For
+instance, an integer programming solver might take exponential time to solve
+the shortest path problem, and it makes much more sense to use a polynomial
+algorithm instead.
+
+For these reasons, even if you are working on an NP-complete problem, it is very hard to know up front whether an integer programming solver will
+be as fast as your custom method in practice. However, if your work requires
+you to solve some NP-complete problem, you probably should know that
+standard solvers for standard problems exist, and also how to make use of them
+when needed.
 
 ## An example problem
 
@@ -140,12 +197,13 @@ A \geq 0 \\
 B \geq 0 
 $$
 
-As this is an instance of integer programming, we can use an integer
+where $$A$$ and $$B$$ are integers, as producing fractional numbers of goods
+does not make much sense. Hence, this is an instance of the integer programming problem, we can use an integer
 programming solver to optimize our revenue!
 
 ## Using Cbc
 
-Cbc is an open-source integer programming solver, that can solve integer programs. In this post, I
+Cbc is an open-source integer programming solver, that can solve integer programs, as well as mixed integer linear programs. In the rest of this post, I
 will demonstrate how to use Cbc for solving the toy problem above.
 
 
@@ -163,11 +221,16 @@ As also mentioned in the project readme, the following commands should handle al
 
 ### Input format
 
+We can view the set of constraints in the instance as a single equality in
+matrix form: $$Ax \leq b$$, where $$A$$ is a matrix, $$x$$ is a variable vector,
+and $$b$$ is a constant vector. Any integer programming solver would let us
+specify $$A$$ and $$b$$ somehow, either explicitly or implicitly.
+
 The primary input format to Cbc is MPS, which stands for "Mathematical
 Programming System". This is quite an awkward format, as:
-* It requires you to specify the constraints column-by-column. I find this very
+* It requires you to specify the constraints column by column. I find this very
   counter-intuitive, as I normally think of a problem as a set of constraints,
-  which would be specified as row-by-row.
+  which would be specified as row by row.
 * The format has fixed column positions.
 
 According to [Wikipedia](https://en.wikipedia.org/wiki/MPS_(format)), solvers seem to have extensions and lifted restrictions to the format. I am not sure whether Cbc supports any extensions, however what is below seems to work fine even though I did not put the columns in the fixed locations specified in the format:
@@ -285,8 +348,8 @@ Even though I did not look up what each column means, the following is evident:
 
 ## Summary
 
-In the following few post, I will dive deeper into practicalities of Cbc, such
-as the C++ API, and customizing the behaviour of the solver. Hope you enjoyed
+In the following few posts, I will dive deeper into practicalities of Cbc, such
+as modeling and solving problems using the C++ API, and customizing the behaviour of the solver. Hope you enjoyed
 this post, and looking forward to hear any comments!
 
 ### Notes
@@ -294,3 +357,6 @@ this post, and looking forward to hear any comments!
 [^candycrushref]: [Candy Crush is NP-hard](https://arxiv.org/abs/1403.1911)
 [^inequality]: The definition can be extended to include equalities as well, as an equality can be written as two inequalities.
 [^cook]: [Cook's Theorem](https://en.wikipedia.org/wiki/Cook%E2%80%93Levin_theorem)
+[^cbc]: [COIN-OR Branch-and-Cut Solver](https://github.com/coin-or/Cbc)
+[^pvsnp]: [P versus NP problem](https://en.wikipedia.org/wiki/P_versus_NP_problem)
+[^npclass]: [NP complexity class](https://en.wikipedia.org/wiki/NP_(complexity))
