@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Encoding Problems in Boolean Satisfiability"
-date:   2019-09-16 22:03:20 -0400
+date:   2019-11-17 10:03:20 -0400
 categories: jekyll update
 mathjax: true
 ---
@@ -56,7 +56,7 @@ SAT solvers take their inputs in "conjunctive normal form (CNF)", which is a con
 
 - Convert all equivalences ($$\equiv$$) to a conjunction of implications
 - Convert all implications ($$\Rightarrow$$) to disjunctions
-- Push all negations through formulas using repeated applications of de Morgan's rules.
+- Push all negations through formulas using repeated applications of [De Morgan's laws](https://en.wikipedia.org/wiki/De_Morgan%27s_laws).
 
 This can actually create a formula that is exponentially longer than the initial formula, however in practice we do not hit that case a lot[^tseitin]. As CNF is a conjunction, it can be thought of a set of properties that our formula satisfy individually. We call the disjunctions in the CNF "clauses".
 
@@ -70,7 +70,7 @@ In the rest of this post, we will consider the Hamiltonian Path Problem, and exp
     <img src="/images/hamilton.png" alt="Image"/>
 </p>
 
-... we look for a path starting from any vertex, which visit all the vertices. The *(only) path in this graph would be $$1 \rightarrow 3 \rightarrow 4 \rightarrow 2 \rightarrow 5$$. The question is: How do we make use of a SAT solver to find this path?
+... we look for a path starting from any vertex, which visit all the vertices. The (only) path in this graph would be $$1 \rightarrow 3 \rightarrow 4 \rightarrow 2 \rightarrow 5$$. The question is: How do we make use of a SAT solver to find this path?
 
 The main idea is the following: First, we encode the problem in SAT such that satisfiable assignments to variables correspond to a Hamiltonian path. Second, we use an off-the-shelf SAT solver to solve the instance. By construction, the assignment given by the SAT solver will represent a Hamiltonian path. Third, we convert the assignments of Boolean variables to an actual path. The following figure illustrates this idea:
 
@@ -461,7 +461,7 @@ between } u \textrm{ and } v
 $$
 
 which are clauses, and we can add them to our formulation to get 
-[hamiltonian.cnf](https://www.github.com/ozanerdem/ozanerdem.github.io/blog/master/cnf/hamiltonian.cnf).
+[hamiltonian.cnf](https://www.github.com/ozanerdem/ozanerdem.github.io/blob/master/cnf/hamiltonian.cnf).
 If we solve this with MiniSat, we get the following assignment:
 
 `
