@@ -100,10 +100,6 @@ the very end, we want the SAT solver to give us an assignment to those propositi
 in such a way that the visited vertices constitute a Hamiltonian path. Hence, the
 following list contains all the propositions we will have:
 
-<!--
-Some Boolean variable $$p$$ being assigned to true should mean that an vertex in our graph is a part of the Hamiltonian path. Similarly, if such a variable is assigned to false, this should mean that the corresponding edge is *not* a part of the Hamiltonian path. How many variables do we need then? There are 6 edges in the input graph, a Hamiltonian path in this particular will have 4 edges, and at the end we will need $$6 \times 4 = 24$$ such variables. In the following, I'll represent these variables using the notation $$h_{ij}$$, which would mean that the $$i^{\textrm{th}}$$ edge in the path is edge $$j$$ in the input graph. As a result, the variables we will need are the following:
--->
-
 \\[
 \begin{matrix}
 h_{11} & h_{12} & h_{13} & h_{14} & h_{15} \\\
@@ -300,8 +296,6 @@ $$
 \end{align*}
 $$
 
-%Uh-oh, we now have really selected for each position, however this looks still
-%awkward in a few ways! For instance, vertex 5 is visited 3 times, which should not happen in a Hamiltonian path. 
 
 Now that we have properly selected a subset of the edges of the input graph, we can actually visualize it. The following shows the path resulting from this assignment:
 
