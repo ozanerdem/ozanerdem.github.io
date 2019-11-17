@@ -509,7 +509,7 @@ is wrong, debugging is a completely different procedure than how you would debug
 a program you implement with a general purpose programming language. In
 this paradigm, you only add or remove constraints in a *declarative* way. This
 does not mean that debugging SAT instances are *always* easier than debugging a
-traditional program, however I would argue that I would very much prefer writing
+traditional program, however I would very much prefer writing
 out a SAT formulation than writing a C++ program that does the same thing.
 
 The formulation I present here, of course, is not the only way to encode the
