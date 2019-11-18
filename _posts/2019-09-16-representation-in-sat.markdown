@@ -494,7 +494,7 @@ This is a tedious, yet easy process:
   original problem.
 
 
-For non-trivial instances, one almost always writes a script to generate the CNf
+For non-trivial instances, one almost always writes a script to generate the CNF
 file from your input data, otherwise keeping track of your variables becomes very
 difficult. You can see a sample script to generate `hamiltonian.cnf` [here](https://www.github.com/ozanerdem/ozanerdem.github.io/blob/master/cnf/generate_hamiltonian.py).
 
