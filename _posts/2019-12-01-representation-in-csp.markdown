@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Solving the Hamiltonian Path Problem as a Constraint Satisfaction Problem"
+title:  "Formulating the Hamiltonian Path Problem as a Constraint Satisfaction Problem"
 date:   2019-12-01 19:18:20 -0400
 categories: jekyll update
 mathjax: true
