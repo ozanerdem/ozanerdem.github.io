@@ -19,7 +19,7 @@ One other option for solving such an NP-complete problem is expressing it as a C
 
 That is, the input languages to the CSP solvers are much more expressive, as they let us talk about many other things than propositions  and Boolean clauses.
 
-You might think that as we increase the expressivity of our constraint language, the computational complexity of finding a solution increases. However, for many useful constraints (including the ones that we will mention in this blog post) the complexity is still NP-complete[^theory].
+You might expect that as we increase the expressivity of our constraint language, the computational complexity of finding a solution would increase as well. However, for many useful constraints (including the ones that we will mention in this blog post) the complexity is still NP-complete[^theory].
 
 In this post, we will explore how we express the Hamiltonian Path Problem as a CSP instance, and solve it using a CSP solver. By doing so, we will demonstrate that it is possible to get a much expressive (and shorter) formulation of the Hamiltonian Path Problem than our previous SAT encoding.
 
@@ -263,7 +263,7 @@ Hope you enjoyed this post! As always, feel free to reach me on Twitter for any 
 
 ### Notes
 
-[^reality]: In practice, solvers model integer variables as finite domain variables with a very large domain. It is possible to come up with a lower and an  upper bound for most constraint problems.
+[^reality]: In practice, solvers model integer variables as finite domain variables with a very large domain. Also, it is usually possible for us to derive lower and  upper bounds for all variables ourselves.
 [^theory]: For instance, if checking the satisfaction of one of your supported constraints is not in P, then your CSP will surely not be an NP-complete problem.
 [^minisat]: [The MiniSat Page](http://minisat.se/)
 [^beware]: You can install Minizinc from [here](https://www.minizinc.org/software.html). Debian and Ubuntu package repositories seem to have `minizinc` packages, however they seem to be outdated a bit.
