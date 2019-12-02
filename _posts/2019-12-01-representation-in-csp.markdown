@@ -66,7 +66,7 @@ Now that we can talk about variables, let us think of what variables we will nee
 
 ## Recap of the SAT formulation
 
-In our SAT formulation, we had the following binary variables:
+In our SAT formulation [here](https://ozanerdem.github.io/jekyll/update/2019/11/17/representation-in-sat.html), we had the following binary variables:
 
 $$\bbox[5px, border: 2px solid black]{h_{ij}: \textrm{The } i^{th} \textrm{ vertex visited in the path is vertex } j}$$
 
@@ -85,7 +85,7 @@ In the rest of the post, I will refer to these classes as **(C1)**, **(C2)**, **
 
 Since CSP is a generalization of SAT, we can still use the same variables to formulate a CSP. However, we can come up with a much more succinct representation as we can use arbitrary finite domain variables in a CSP.
 
-In our SAT formulation, $$h_{ij}$$ being true meant that the $$i^{th}$$ vertex in our output path is vertex $$j$$. What we were trying to do was actually *mapping* each order index to some vertex. When you think about variables and assignments, an assignment is also a *mapping* to a set of variables. So what the SAT encoding was doing was actually imitating assignments to a variables that we never had in the first place! If we represented each order in the path as a variable with a domain of $$\{1, 2, 3, 4, 5\}$$, that would all be what we need. That is:
+In our SAT formulation, $$h_{ij}$$ being true meant that the $$i^{th}$$ vertex in our output path is vertex $$j$$. What we were trying to do was actually *mapping* each order index to some vertex. When you think about variables and assignments, an assignment is also a *mapping* to a set of variables. This hints that what the SAT encoding was doing was actually imitating assignments to a variables that we never had in the first place! If we represented each order in the path as a variable with a domain of $$\{1, 2, 3, 4, 5\}$$, that would all be what we need. That is:
 
 ```
 array[1..5] of var 1..5: path;
