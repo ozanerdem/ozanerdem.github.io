@@ -515,7 +515,7 @@ One important question regarding this paradigm is the following: If we can
 encode *any* problem in NP as a CNF, how can we encode non-binary values as
 propositions? For instance, in the Traveling Salesman Problem (TSP) one has to
 consider distances between cities, and it is not clear how one can easily encode
-integer distances in SAT. I will leave the answer to another post!
+integer distances in SAT. I will leave the answer for another post!
 
 If you have any comments, or questions, do not hesitate to contact me on [Twitter](http://www.twitter.com/ozanerdem).
 
