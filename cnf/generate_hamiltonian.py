@@ -87,9 +87,10 @@ if __name__ == "__main__":
 
     # Remove the existing edges, so that you are left with the inexistent edges
     for edge in edges:
-        if (edge.source, edge.target) in l:
+        if (edge.source, edge.target) in lits:
             lits.remove((edge.source, edge.target))
 
-    for (src, tgt) in l:
+    for (src, tgt) in lits:
         for o in range(1, num_nodes):
             print -dimacs_map[o][src], -dimacs_map[o + 1][tgt], "0"
+
